@@ -129,6 +129,7 @@ const item1 = new Product({
   })
 
   //cart
+
   app.post("/addToCart/:id", (req, res) => {
     const id = parseInt(req.params.id);
     
@@ -158,6 +159,37 @@ const item1 = new Product({
     find();
   })
 
+  app.delete("/addToCart/:id", (req, res) => {
+    const id = parseInt(req.params.id);
+    async function del() {
+      await Cart.deleteOne({ id: id });
+    }
+    del();
+    res.json(id);
+  })
+
+  app.patch("/addToCart/:id", (req, res) => {
+    const id = parseInt(req.params.id);
+    // const updatedQuantity = req.body.quantity;
+    // const updatedPrice = 2*updatedQuantity;
+  
+    async function find() {
+      const document = await Cart.findOneAndUpdate({ id: id },
+        {
+          quantity : req.body.quantity,
+          // price: updatedPrice 
+        })
+        const currentPrice = document.price;
+
+        const document1 = await Cart.findOneAndUpdate({ id: id },
+          {
+            price: currentPrice*req.body.quantity
+          })
+
+    }
+    find();
+    res.json(id);
+  })
 
 
 app.listen(port, ()=>{
