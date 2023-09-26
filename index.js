@@ -14,6 +14,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 let lastId=1;
+let cartId=0;
 
 const EcommerceSchema = new mongoose.Schema({
     id: Number,
@@ -25,7 +26,19 @@ const EcommerceSchema = new mongoose.Schema({
     image: String
 });
 
+const cartSchema = new mongoose.Schema({
+  id: Number,
+  name: String, 
+  description: String,
+  price: Number,
+  quantity: Number,
+  category: String,
+  image: String
+});
+
 const Product = mongoose.model('Product', EcommerceSchema);
+
+const Cart = mongoose.model('Cart', cartSchema);
 
 const item1 = new Product({
     id: 1,
@@ -114,6 +127,38 @@ const item1 = new Product({
     del();
     res.json(id);
   })
+
+  //cart
+  app.post("/addToCart/:id", (req, res) => {
+    const id = parseInt(req.params.id);
+    
+    async function find() {
+      const foundById = await Product.findOne({ id: id });
+      if (!foundById) {
+        return res.status(404)
+          .json({ message: "Post not found" });
+      }
+      else {
+        
+      const cartItem = new Cart({
+        id: foundById.id,
+        name: foundById.name,
+        description : foundById.description,
+        price : foundById.price,
+        quantity : foundById.quantity,
+        category : foundById.category,
+        image : foundById.image,
+    })
+    cartItem.save();
+    res.json(cartItem).status(201);
+    
+      }
+    }
+
+    find();
+  })
+
+
 
 app.listen(port, ()=>{
     console.log(`Server is running at port ${port}`);
