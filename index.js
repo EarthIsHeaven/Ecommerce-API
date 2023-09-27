@@ -170,18 +170,17 @@ const item1 = new Product({
 
   app.patch("/addToCart/:id", (req, res) => {
     const id = parseInt(req.params.id);
-    // const updatedQuantity = req.body.quantity;
-    // const updatedPrice = 2*updatedQuantity;
   
     async function find() {
-      const document = await Cart.findOneAndUpdate({ id: id },
+      await Cart.findOneAndUpdate({ id: id },
         {
           quantity : req.body.quantity,
-          // price: updatedPrice 
         })
-        const currentPrice = document.price;
 
-        const document1 = await Cart.findOneAndUpdate({ id: id },
+        const foundByIdInProduct = await Product.findOne({ id: id });
+        const currentPrice = foundByIdInProduct.price;
+
+        await Cart.findOneAndUpdate({ id: id },
           {
             price: currentPrice*req.body.quantity
           })
