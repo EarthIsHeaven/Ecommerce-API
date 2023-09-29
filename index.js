@@ -36,9 +36,18 @@ const cartSchema = new mongoose.Schema({
   image: String
 });
 
+const buySchema = new mongoose.Schema({
+  id: Number,
+  name: String,
+  price: Number,
+  quantity: Number
+})
+
 const Product = mongoose.model('Product', EcommerceSchema);
 
 const Cart = mongoose.model('Cart', cartSchema);
+
+const Buy = mongoose.model('Buy', buySchema);
 
 const item1 = new Product({
     id: 1,
@@ -188,6 +197,34 @@ const item1 = new Product({
     }
     find();
     res.json(id);
+  })
+
+  //Buy now
+
+  app.post("/buyNow/:id", (req, res) => {
+    const id = parseInt(req.params.id);
+    
+    async function find() {
+      const foundById = await Cart.findOne({ id: id });
+      if (!foundById) {
+        return res.status(404)
+          .json({ message: "Item not found in cart" });
+      }
+      else {
+        
+      const buyItem = new Buy({
+        id: foundById.id,
+        name: foundById.name,
+        price : foundById.price,
+        quantity : foundById.quantity,
+    })
+    buyItem.save();
+    res.json(buyItem).status(201);
+    
+      }
+    }
+
+    find();
   })
 
 
