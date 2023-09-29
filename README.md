@@ -10,6 +10,11 @@ Shopping Cart Functionality:
 
 Users can Implement features like adding/removing items, updating quantities, and calculating the total price.
 
+Order Processing:
+
+Users can add item for payment procedure from cart page.
+
+
 How to use this API?
 
 
