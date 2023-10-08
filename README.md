@@ -1,6 +1,6 @@
 # Ecommerce-API
 
-This is a ecommerce website where users can : - 
+This is a Ecommerce website where users can : - 
 
 Manage products:
 
